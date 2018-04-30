@@ -2,15 +2,18 @@ package gpxLib;
 
 import org.w3c.dom.*;
 
-import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.validation.*;
 import java.io.*;
+import java.util.ArrayList;
 
+/**
+ * Class to load a .GPX File into a list of trackpoints. GPX is written in xml and DOM library is used to parse.
+ *
+ * @see GPXTrackpoint
+ */
 public class GPXFile {
 
-    private NodeList waypoints;
+    private ArrayList<ITrackpoint> trackpoints;
 
     private File file;
     private DocumentBuilderFactory factory;
@@ -18,8 +21,34 @@ public class GPXFile {
     private Document document;
     private Element root;
 
+    /**
+     * Loads the given GPX file into trackpoints.
+     *
+     * @param file                      The file that should be loaded
+     * @throws InvalidFileException     Thrown if file is invalid
+     */
     public GPXFile(File file) throws InvalidFileException{
         this.file = file;
+        trackpoints = new ArrayList<ITrackpoint>();
+        parseXML();
+    }
+
+    /**
+     * Loads the File at the given Filepath into trackpoints.
+     *
+     * @param filepath                  filepath to the file that should be loaded.
+     * @throws InvalidFileException     Thrown if file is invalid
+     */
+    public GPXFile(String filepath) throws InvalidFileException{
+        File file = new File(filepath);
+        trackpoints = new ArrayList<ITrackpoint>();
+        parseXML();
+    }
+
+    /**
+     * Helper method to parse the xml file.
+     */
+    private void parseXML() {
         factory = DocumentBuilderFactory.newInstance();
         try {
             builder = factory.newDocumentBuilder();
@@ -29,22 +58,33 @@ public class GPXFile {
         }
         document.getDocumentElement().normalize();
         root = document.getDocumentElement();
-        readFile();
+        writeTrackPoints();
     }
 
-    private void readFile(){
+    /**
+     * Helper method to write DOM into Trackpoints
+     */
+    private void writeTrackPoints(){
         NodeList trkpts = document.getElementsByTagName("trkpt");
         for(int i = 0; i < trkpts.getLength(); i++) {
-            Node nNode = trkpts.item(i);
             Element trkpt = (Element) trkpts.item(i);
-            String lat = trkpt.getAttribute("lat");
-            System.out.println("\nCurrent Element :" + nNode.getNodeName() + " Lat: " + lat);
+            double lat = Double.parseDouble(trkpt.getAttribute("lat"));
+            double lon = Double.parseDouble(trkpt.getAttribute("lon"));
+            double ele = 0;
+            if(trkpt.getElementsByTagName("ele").getLength() > 0)
+                ele = Double.parseDouble(trkpt.getElementsByTagName("ele").item(0).getTextContent());
+            Time time = new Time(trkpt.getElementsByTagName("time").item(0).getTextContent());
+            GPXTrackpoint trackpoint = new GPXTrackpoint(lat, lon, ele, time);
+            trackpoints.add(trackpoint);
         }
     }
 
-    public static void main(String[] args){
-        File myFile = new File("/Users/nicolasmuller/Downloads/Nicolas_Mller_2018-04-26_18-51-17.gpx");
-        GPXFile gpxfile = new GPXFile(myFile);
+    /**
+     * Returns an Arraylist of Trackpoints from the file loaded.
+     * @return      An Arraylist of Trackpoints from the file loaded.
+     */
+    public ArrayList<ITrackpoint> getTrackpoints(){
+        return trackpoints;
     }
 
 }
