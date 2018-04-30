@@ -13,7 +13,6 @@ public class TimeTester {
         assertEquals(58, time.getMinutes());
         assertEquals(33, time.getSeconds());
     }
-
     @Test
     public void testTimeStringTwo(){
         Time time = new Time("><time>2018-04-21T15:02:16.000Z</ti");
@@ -21,5 +20,26 @@ public class TimeTester {
         assertEquals(15, time.getHours());
         assertEquals(02, time.getMinutes());
         assertEquals(16, time.getSeconds());
+    }
+    @Test
+    public void testTimeCompareBigger(){
+        Time bigger = new Time("2018-04-26T16:58:33.000Z");
+        Time smaller = new Time("2018-04-26T16:57:33.000Z");
+        assertEquals(1, bigger.compareTo(smaller));
+
+    }
+    @Test
+    public void testTimeCompareSmaller(){
+        Time bigger = new Time("2018-04-26T16:58:33.000Z");
+        Time smaller = new Time("2018-04-26T16:57:33.000Z");
+        assertEquals(-1, smaller.compareTo(bigger));
+
+    }
+    @Test
+    public void testTimeCompareEquals(){
+        Time bigger = new Time("2018-04-26T16:57:33.000Z");
+        Time smaller = new Time("2018-04-26T16:57:33.000Z");
+        assertEquals(0, smaller.compareTo(bigger));
+
     }
 }

@@ -5,7 +5,7 @@ import java.util.regex.*;
 /**
  * Time format class. Stores a time from either a String or by hours, minutes and seconds.
  */
-public class Time {
+public class Time implements Comparable<Time>{
     private final String TIME_PATTERN = "[\\d]{2}+[:]+[\\d]{2}+[:]+[\\d]{2}";
     private final String HHMMSS_PATTERN = "[\\d]{2}";
 
@@ -88,5 +88,17 @@ public class Time {
      */
     public String toString(){
         return this.time_String;
+    }
+
+    @Override
+    public int compareTo(Time time) {
+        int secondsFromMidnightTime = (time.hours * 60 * 60) + (time.minutes * 60) + time.seconds;
+        int secondsFromMidnightThis = (this.hours * 60 * 60) + (this.minutes * 60) + this.seconds;
+        int dif = secondsFromMidnightTime - secondsFromMidnightThis;
+        if(dif > 0)
+            return -1;
+        else if(dif < 0)
+            return 1;
+        return 0;
     }
 }
