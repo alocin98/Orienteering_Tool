@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class GPXFile {
 
-    private ArrayList<ITrackpoint> trackpoints;
+    private ArrayList<Trackpoint> trackpoints;
 
     private File file;
     private DocumentBuilderFactory factory;
@@ -29,7 +29,7 @@ public class GPXFile {
      */
     public GPXFile(File file) throws InvalidFileException{
         this.file = file;
-        trackpoints = new ArrayList<ITrackpoint>();
+        trackpoints = new ArrayList<Trackpoint>();
         parseXML();
     }
 
@@ -41,7 +41,7 @@ public class GPXFile {
      */
     public GPXFile(String filepath) throws InvalidFileException{
         File file = new File(filepath);
-        trackpoints = new ArrayList<ITrackpoint>();
+        trackpoints = new ArrayList<Trackpoint>();
         parseXML();
     }
 
@@ -74,16 +74,22 @@ public class GPXFile {
             if(trkpt.getElementsByTagName("ele").getLength() > 0)
                 ele = Double.parseDouble(trkpt.getElementsByTagName("ele").item(0).getTextContent());
             Time time = new Time(trkpt.getElementsByTagName("time").item(0).getTextContent());
-            GPXTrackpoint trackpoint = new GPXTrackpoint(lat, lon, ele, time);
+            Trackpoint trackpoint = new Trackpoint(lat, lon, ele, time);
             trackpoints.add(trackpoint);
         }
+        connectTrackpoints();
+    }
+
+    private void connectTrackpoints() {
+        for(int i = 0; i < trackpoints.size()-1; i++)
+            trackpoints.get(i).setNext(trackpoints.get(i+1));
     }
 
     /**
      * Returns an Arraylist of Trackpoints from the file loaded.
      * @return      An Arraylist of Trackpoints from the file loaded.
      */
-    public ArrayList<ITrackpoint> getTrackpoints(){
+    public ArrayList<Trackpoint> getTrackpoints(){
         return trackpoints;
     }
 

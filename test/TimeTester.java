@@ -42,4 +42,11 @@ public class TimeTester {
         assertEquals(0, smaller.compareTo(bigger));
 
     }
+    @Test
+    public void testTimeSeconds(){
+        Time time = new Time(310);
+        assertEquals(5, time.getMinutes());
+        assertEquals(10, time.getSeconds());
+
+    }
 }

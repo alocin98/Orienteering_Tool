@@ -46,6 +46,13 @@ public class Time implements Comparable<Time>{
         extractHHMMSS(time_String);
     }
 
+    public Time(int seconds){
+        int tmp = seconds % 60;
+        this.minutes = seconds / 60;
+        this.seconds = tmp;
+
+    }
+
     /**
      * Helper method to extract time text
      * @param time
@@ -92,13 +99,17 @@ public class Time implements Comparable<Time>{
 
     @Override
     public int compareTo(Time time) {
-        int secondsFromMidnightTime = (time.hours * 60 * 60) + (time.minutes * 60) + time.seconds;
-        int secondsFromMidnightThis = (this.hours * 60 * 60) + (this.minutes * 60) + this.seconds;
+        int secondsFromMidnightTime = time.getTimeInSeconds();
+        int secondsFromMidnightThis = this.getTimeInSeconds();
         int dif = secondsFromMidnightTime - secondsFromMidnightThis;
         if(dif > 0)
             return -1;
         else if(dif < 0)
             return 1;
         return 0;
+    }
+
+    public int getTimeInSeconds(){
+        return (this.hours * 60 * 60) + (this.minutes * 60) + this.seconds;
     }
 }
