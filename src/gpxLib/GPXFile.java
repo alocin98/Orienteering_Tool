@@ -73,8 +73,18 @@ public class GPXFile {
             double ele = 0;
             if(trkpt.getElementsByTagName("ele").getLength() > 0)
                 ele = Double.parseDouble(trkpt.getElementsByTagName("ele").item(0).getTextContent());
-            Time time = new Time(trkpt.getElementsByTagName("time").item(0).getTextContent());
+            String timeString = trkpt.getElementsByTagName("time").item(0).getTextContent();
+            Time time = new Time(timeString);
             Trackpoint trackpoint = new Trackpoint(lat, lon, ele, time);
+
+            //Save starting time of track
+            if(i == 0) {
+                trackpoint.setStartTime(time);
+                trackpoint.setDate(timeString);
+            }
+
+
+            //Add generated trackpoint to list
             trackpoints.add(trackpoint);
         }
         connectTrackpoints();

@@ -2,6 +2,10 @@ package gpxLib;
 
 import Rendering.Vector2;
 
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * A Trackpoint stores the location data loaded from the file. It contains the Lon and Lat at the given time.
  * If Elevation data is present, it also stores that.
@@ -10,12 +14,18 @@ public class Trackpoint {
 
     //GPS Data
     private double latitude, longitude, elevation;
-    private Time time;
+    private Time realTime, timeFromStart;
+
+    public static Time startTime;
+    public static Date date;
+
     //Calculated Data
     private Vector2 vectorToNext;
+    private Vector2 mirrorVector;
     private double dist;
     private Time pace;
     private int deltaTime;
+
     //Next Trackpoint
     private Trackpoint next;
 
@@ -32,7 +42,7 @@ public class Trackpoint {
     public Trackpoint(double lat, double lon, double elevation, Time time){
         this.latitude = lat;
         this.longitude = lon;
-        this.time = time;
+        this.realTime = time;
         this.elevation = elevation;
     }
 
@@ -53,8 +63,46 @@ public class Trackpoint {
     /**
      * @return                  The Time of the location
      */
-    public Time getTime() {
-        return time;
+    public Time getRealTime() {
+        return realTime;
+    }
+
+    /**
+     * Sets the overall starting tame of the track.
+     * @param time              The starting time of the track.
+     */
+    public static void setStartTime(Time time){
+        Trackpoint.startTime = time;
+    }
+
+    /**
+     *
+     * @param date
+     */
+    public static void setDate(String date){
+        int year = 44;
+        int month = 44;
+        int day = 44;
+        final String DATA_PATTERN = "[\\d]{4}[-][\\d]{2}[-][\\d]{2}";
+        final String YYYY_PATTERN = "[\\d]{4}";
+        final String MMDD_PATTERN = "[\\d]{2}";
+        Pattern datePattern = Pattern.compile(DATA_PATTERN);
+        Matcher dateMatcher = datePattern.matcher(date);
+        if(dateMatcher.find()){
+            String date_String = dateMatcher.group(0);
+            datePattern = Pattern.compile(YYYY_PATTERN);
+            dateMatcher = datePattern.matcher(date_String);
+            if(dateMatcher.find())
+                year = Integer.parseInt(dateMatcher.group(0));
+            datePattern = Pattern.compile(MMDD_PATTERN);
+            dateMatcher = datePattern.matcher(date_String);
+            if(dateMatcher.find())
+                month = Integer.parseInt(dateMatcher.group());
+            if(dateMatcher.find())
+                day = Integer.parseInt(dateMatcher.group());
+            Trackpoint.date = new Date(year, month, day);
+
+        }
     }
 
     /**
@@ -122,8 +170,9 @@ public class Trackpoint {
         double x = next.getLat() - this.getLat();
         double y = next.getLon() - this.getLon();
         vectorToNext = new Vector2(x, y);
+        mirrorVector = vectorToNext;
         dist = distance(this.latitude, this.longitude, next.getLat(), next.getLon());
-        deltaTime = next.getTime().getTimeInSeconds() - this.time.getTimeInSeconds();
+        deltaTime = next.getRealTime().getTimeInSeconds() - this.realTime.getTimeInSeconds();
         pace = new Time((int)(1/dist) * deltaTime);
     }
 

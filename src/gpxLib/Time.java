@@ -62,7 +62,6 @@ public class Time implements Comparable<Time>{
      * @param time
      */
     private void extractHHMMSS(String time){
-        int[] numbers = new int[3];
         Pattern two_digits = Pattern.compile(HHMMSS_PATTERN);
         Matcher m = two_digits.matcher(time);
         if(m.find())
