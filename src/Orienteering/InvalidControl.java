@@ -3,18 +3,15 @@ package Orienteering;
 import Rendering.Vector2;
 import gpxLib.Time;
 
-public class Finish extends Control {
-    public Finish(Vector2 position, Time time) {
-        super(position, time);
-    }
+public class InvalidControl extends Control{
 
-    public Finish(Control ctrl) {
-        super(ctrl.position(), ctrl.getTime());
+    public InvalidControl() {
+        super(new Vector2(0,0), new Time(0));
     }
 
     @Override
     public String getRepresentation() {
-        return "FINISH: " + super.getTime();
+        return null;
     }
 
     @Override
@@ -24,11 +21,11 @@ public class Finish extends Control {
 
     @Override
     public boolean isFinish() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isValid() {
-        return true;
+        return false;
     }
 }

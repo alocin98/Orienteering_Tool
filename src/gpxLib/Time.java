@@ -46,6 +46,10 @@ public class Time implements Comparable<Time>{
         extractHHMMSS(time_String);
     }
 
+    /**
+     * Initializes a Time with the given seconds. Calculates them into minutes and seconds.
+     * @param seconds
+     */
     public Time(int seconds){
         int tmp = seconds % 60;
         this.minutes = seconds / 60;

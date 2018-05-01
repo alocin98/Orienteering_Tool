@@ -8,11 +8,15 @@ import Rendering.Vector2;
  */
 public class Trackpoint {
 
+    //GPS Data
     private double latitude, longitude, elevation;
+    private Time time;
+    //Calculated Data
     private Vector2 vectorToNext;
     private double dist;
-    private Time time, pace;
+    private Time pace;
     private int deltaTime;
+    //Next Trackpoint
     private Trackpoint next;
 
 
