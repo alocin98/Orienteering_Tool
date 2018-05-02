@@ -16,12 +16,11 @@ public class Trackpoint {
     private double latitude, longitude, elevation;
     private Time realTime, timeFromStart;
 
-    public static Time startTime;
-    public static Date date;
+    //Head-File
+    private GPSFile headfile;
 
     //Calculated Data
     private Vector2 vectorToNext;
-    private Vector2 mirrorVector;
     private double dist;
     private Time pace;
     private int deltaTime;
@@ -46,6 +45,35 @@ public class Trackpoint {
         this.elevation = elevation;
     }
 
+
+    //------------Setter Methods--------------------------
+    /**
+     * Sets the next Trackpoint and calculates data with its helper method:
+     * -vector to next
+     * -distance to next
+     * -time to next
+     * -actual pace
+     *
+     * @param next          The trackpoint following this one
+     */
+    public void setNext(Trackpoint next) {
+        this.next = next;
+        calculate(next);
+    }
+
+    /**
+     * Sets Pointer to the headfile, which is a GPSFile
+     * @param gpsfile           The GPSFile this trackpoint belongs to.
+     * @see GPSFile
+     */
+    public void setHeadFile(GPSFile gpsfile){
+        this.headfile = gpsfile;
+        int timeInSeconds = this.getRealTime().getTimeInSeconds() - headfile.getStartTime().getTimeInSeconds();
+        this.timeFromStart = new Time(timeInSeconds);
+    }
+
+
+    //------------Getter Methods--------------------------
     /**
      * @return                  The Latitude (Coordinate in degrees) of the location
      */
@@ -61,6 +89,13 @@ public class Trackpoint {
     }
 
     /**
+     * @return                  The Elevation (in meters above sea) of the location
+     */
+    public double getEle() {
+        return elevation;
+    }
+
+    /**
      * @return                  The Time of the location
      */
     public Time getRealTime() {
@@ -68,48 +103,18 @@ public class Trackpoint {
     }
 
     /**
-     * Sets the overall starting tame of the track.
-     * @param time              The starting time of the track.
+     * @return              The time from this point to the next one
      */
-    public static void setStartTime(Time time){
-        Trackpoint.startTime = time;
+    public int getDeltaTime(){
+        return deltaTime;
     }
 
     /**
-     *
-     * @param date
+     * Gets the time passed from Start to this point.
+     * @return          The time passed from Start to this point.
      */
-    public static void setDate(String date){
-        int year = 44;
-        int month = 44;
-        int day = 44;
-        final String DATA_PATTERN = "[\\d]{4}[-][\\d]{2}[-][\\d]{2}";
-        final String YYYY_PATTERN = "[\\d]{4}";
-        final String MMDD_PATTERN = "[\\d]{2}";
-        Pattern datePattern = Pattern.compile(DATA_PATTERN);
-        Matcher dateMatcher = datePattern.matcher(date);
-        if(dateMatcher.find()){
-            String date_String = dateMatcher.group(0);
-            datePattern = Pattern.compile(YYYY_PATTERN);
-            dateMatcher = datePattern.matcher(date_String);
-            if(dateMatcher.find())
-                year = Integer.parseInt(dateMatcher.group(0));
-            datePattern = Pattern.compile(MMDD_PATTERN);
-            dateMatcher = datePattern.matcher(date_String);
-            if(dateMatcher.find())
-                month = Integer.parseInt(dateMatcher.group());
-            if(dateMatcher.find())
-                day = Integer.parseInt(dateMatcher.group());
-            Trackpoint.date = new Date(year, month, day);
-
-        }
-    }
-
-    /**
-     * @return                  The Elevation (in meters above sea) of the location
-     */
-    public double getEle() {
-        return elevation;
+    public Time getTimeFromStart(){
+        return this.timeFromStart;
     }
 
     /**
@@ -121,25 +126,11 @@ public class Trackpoint {
     }
 
     /**
-     * Sets the next Trackpoint and calculates data with its helper method:
-     * -vector to next
-     * -distance to next
-     * -time to next
-     * -actual pace
-     *
-     * @param next          The trackpoint following this one
-     */
-    public void setNext(Trackpoint next) {
-        calculate(next);
-        this.next = next;
-    }
-
-    /**
      * Returns the distance to the next point in km.
      * @return          the distance to the next point in km.
      */
     public double getDist(){
-        return dist;
+        return this.dist;
     }
 
     /**
@@ -150,13 +141,8 @@ public class Trackpoint {
         return pace;
     }
 
-    /**
-     * @return              The time from this point to the next one
-     */
-    public int getDeltaTime(){
-        return deltaTime;
-    }
 
+    //-----------Helper Methods--------------------------
     /**
      * Helper method to calculate:
      * -vector to next
@@ -170,7 +156,6 @@ public class Trackpoint {
         double x = next.getLat() - this.getLat();
         double y = next.getLon() - this.getLon();
         vectorToNext = new Vector2(x, y);
-        mirrorVector = vectorToNext;
         dist = distance(this.latitude, this.longitude, next.getLat(), next.getLon());
         deltaTime = next.getRealTime().getTimeInSeconds() - this.realTime.getTimeInSeconds();
         pace = new Time((int)(1/dist) * deltaTime);

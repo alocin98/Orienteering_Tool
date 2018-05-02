@@ -5,18 +5,19 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GPXFileTester {
+public class TrackpointTester {
     @Test
     public void testFileInit(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
+        GPSFileLoader gpxfile = new GPSFileLoader(file);
     }
 
     @Test
     public void testTrackpointParse(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
-        Trackpoint GPXTrackpoint = gpxfile.getTrackpoints().get(0);
+        GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
+        GPSFile gps = gpxfileLoader.getGPSFile();
+        Trackpoint GPXTrackpoint = gps.getPointAt(0);
         assertEquals(46.90106667, GPXTrackpoint.getLat());
         assertEquals(7.54641467, GPXTrackpoint.getLon());
         assertEquals(568.0, GPXTrackpoint.getEle());
@@ -28,11 +29,12 @@ public class GPXFileTester {
     @Test
     public void testTrackpointDistance(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
-        Trackpoint GPXTrackpoint = gpxfile.getTrackpoints().get(1);
+        GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
+        GPSFile gps = gpxfileLoader.getGPSFile();
+        Trackpoint GPXTrackpoint = gps.getPointAt(1);
         assertEquals(46.90106667, GPXTrackpoint.getLat());
         assertEquals(7.54641467, GPXTrackpoint.getLon());
-        Trackpoint TrackpointTwo = gpxfile.getTrackpoints().get(2);
+        Trackpoint TrackpointTwo = gps.getPointAt(2);
         assertEquals(46.90109217, TrackpointTwo.getLat());
         assertEquals(7.54640683, TrackpointTwo.getLon());
         assertEquals(0.0028973584364006193, GPXTrackpoint.getDist());
@@ -42,8 +44,9 @@ public class GPXFileTester {
     @Test
     public void testTrackpointDeltaTime(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
-        Trackpoint GPXTrackpoint = gpxfile.getTrackpoints().get(1);
+        GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
+        GPSFile gps = gpxfileLoader.getGPSFile();
+        Trackpoint GPXTrackpoint = gps.getPointAt(1);
         assertEquals(46.90106667, GPXTrackpoint.getLat());
         assertEquals(7.54641467, GPXTrackpoint.getLon());
         assertEquals(1, GPXTrackpoint.getDeltaTime());
@@ -53,8 +56,9 @@ public class GPXFileTester {
     @Test
     public void testTrackpointPace(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
-        Trackpoint GPXTrackpoint = gpxfile.getTrackpoints().get(1260);
+        GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
+        GPSFile gps = gpxfileLoader.getGPSFile();
+        Trackpoint GPXTrackpoint = gps.getPointAt(1260);
         assertEquals(0, GPXTrackpoint.getPace().getHours());
         assertEquals(3, GPXTrackpoint.getPace().getMinutes());
         assertEquals(14, GPXTrackpoint.getPace().getSeconds());
@@ -64,10 +68,23 @@ public class GPXFileTester {
     @Test
     public void testStartTime(){
         File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
-        GPXFile gpxfile = new GPXFile(file);
-        Trackpoint any = gpxfile.getTrackpoints().get(948);
-        assertEquals(Trackpoint.startTime.toString(), new Time("2018-04-25T15:19:09.000Z").toString());
-        Trackpoint anyOther = gpxfile.getTrackpoints().get(4092);
-        assertEquals(Trackpoint.startTime.toString(), new Time("2018-04-25T15:19:09.000Z").toString());
+        GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
+        GPSFile gps = gpxfileLoader.getGPSFile();
+        Trackpoint GPXTrackpoint = gps.getPointAt(948);
+        assertEquals(gps.getStartTime().toString(), new Time("2018-04-25T15:19:09.000Z").toString());
+        Trackpoint anyOther = gps.getPointAt(3012);
+        assertEquals(gps.getStartTime().toString(), new Time("2018-04-25T15:19:09.000Z").toString());
+    }
+
+    @Test
+    public void testTotalTime(){
+        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        GPSFileLoader fileloader = new GPSFileLoader(file);
+        GPSFile gpsfile = fileloader.getGPSFile();
+        double dist = 0;
+        for(int i = 0; i < gpsfile.getTrackpointList().size(); i++){
+            dist += gpsfile.getTrackpointList().get(i).getDist();
+        }
+        assertEquals(8.729878672263073, dist);
     }
 }

@@ -1,11 +1,17 @@
 package gpxLib;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.regex.*;
 
 /**
  * Time format class. Stores a time from either a String or by hours, minutes and seconds.
  */
 public class Time implements Comparable<Time>{
+
     private final String TIME_PATTERN = "[\\d]{2}+[:]+[\\d]{2}+[:]+[\\d]{2}";
     private final String HHMMSS_PATTERN = "[\\d]{2}";
 
@@ -40,8 +46,9 @@ public class Time implements Comparable<Time>{
     public Time(String time){
         Pattern timePattern = Pattern.compile(TIME_PATTERN);
         Matcher timeMatcher = timePattern.matcher(time);
+        String time_string;
         if(timeMatcher.find()){
-            this.time_String = timeMatcher.group(0);
+            time_String = timeMatcher.group(0);
         }
         extractHHMMSS(time_String);
     }
@@ -54,7 +61,6 @@ public class Time implements Comparable<Time>{
         int tmp = seconds % 60;
         this.minutes = seconds / 60;
         this.seconds = tmp;
-
     }
 
     /**
@@ -97,7 +103,7 @@ public class Time implements Comparable<Time>{
      * @return                    String representation of this Time, format HH:MM:SS
      */
     public String toString(){
-        return this.time_String;
+        return String.format("%02d:%02d:%02d",hours, minutes, seconds);
     }
 
     @Override
