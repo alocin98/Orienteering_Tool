@@ -9,6 +9,11 @@ public class Vector2 {
         this.y = y;
     }
 
+    public Vector2(Vector2 from, Vector2 to){
+        this.x = to.getX() - from.getX();
+        this.y = to.getY() - from.getY();
+    }
+
     public double getX(){
         return this.x;
     }
@@ -32,5 +37,9 @@ public class Vector2 {
 
     public double dist(){
         return Math.sqrt((x*x)+(y*y));
+    }
+
+    public String toString(){
+        return "x: "+ x +" y: "+ y;
     }
 }

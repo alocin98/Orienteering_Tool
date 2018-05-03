@@ -1,38 +1,57 @@
-import Orienteering.Control;
+
+import Orienteering.ControlType;
 import Orienteering.Course;
-import Orienteering.CourseGenerator;
 import Rendering.Vector2;
-import gpxLib.Time;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CourseTest {
 
     @Test
-    public void createCourseTest(){
-        CourseGenerator cg = new CourseGenerator();
-        Control ctrl = new Control(new Vector2(0.0,0.0), new Time(0));
-        cg.addControl(new Vector2(0.0,0.0), new Time(0));
-        cg.addControl(new Vector2(1,1), new Time(3));
-        cg.addControl(new Vector2(2,2), new Time(6));
-        cg.addControl(new Vector2(3,3), new Time(9));
-        cg.addControl(new Vector2(4,4), new Time(12));
-        Course course = cg.extractCourse();
+    public void courseTest(){
+        Course course = new Course();
+        course.addControl(new Vector2(10,20));
+        course.addControl(new Vector2(12,22));
+        course.addControl(new Vector2(14,24));
+        course.addControl(new Vector2(16,26));
+        course.addControl(new Vector2(18,28));
+        assertEquals(ControlType.START, course.getControl(0).getType());
+        assertEquals(ControlType.FINISH, course.getControl(course.getControlList().size()-1).getType());
     }
 
     @Test
-    public void CourseValidTest(){
-        CourseGenerator cg = new CourseGenerator();
-        cg.addControl(new Vector2(0.0,0.0), new Time(0));
-        cg.addControl(new Vector2(1.0,1.0), new Time(3));
-        cg.addControl(new Vector2(2.0,2.0), new Time(6));
-        cg.addControl(new Vector2(3.0,3.0), new Time(9));
-        cg.addControl(new Vector2(4.0,4.0), new Time(12));
-        Course course = cg.extractCourse();
-        assertTrue(course.getControl(0).isStart());
-        assertTrue(course.getFinish().isFinish());
-        assertFalse(course.getControl(2).isFinish());
+    public void addControlTest(){
+        Course course = new Course();
+        course.addControl(new Vector2(10,20));
+        course.addControl(new Vector2(12,22));
+        assertEquals(ControlType.START, course.getControl(0).getType());
+        assertEquals(ControlType.FINISH, course.getControl(1).getType());
+
+        course.addControl(new Vector2(14,24));
+        assertEquals(ControlType.START, course.getControl(0).getType());
+        assertEquals(ControlType.NORMAL, course.getControl(1).getType());
+        assertEquals(ControlType.FINISH, course.getControl(2).getType());
+
+        course.addControl(new Vector2(16,26));
+        assertEquals(ControlType.START, course.getControl(0).getType());
+        assertEquals(ControlType.NORMAL, course.getControl(1).getType());
+        assertEquals(ControlType.NORMAL, course.getControl(2).getType());
+        assertEquals(ControlType.FINISH, course.getControl(3).getType());
+    }
+
+    @Test
+    public void controlVectorTest(){
+        Course course = new Course();
+        course.addControl(new Vector2(10,20));
+        course.addControl(new Vector2(12,22));
+        assertEquals("x: 2.0 y: 2.0", course.getControl(0).getVectorToNext().toString());
+        course.addControl(new Vector2(20,21));
+        assertEquals("x: 8.0 y: -1.0", course.getControl(1).getVectorToNext().toString());
+        course.addControl(new Vector2(50,50));
+        assertEquals("x: 30.0 y: 29.0", course.getControl(2).getVectorToNext().toString());
+
     }
 }

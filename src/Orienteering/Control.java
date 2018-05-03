@@ -5,21 +5,53 @@ import gpxLib.Time;
 
 public class Control {
 
-    protected Vector2 position;
-    protected int controlNumber;
-    protected Time time;
-    protected Control nextControl;
+    public Course course;
 
-    public Control(Vector2 position, Time time){
+    private Vector2 position;
+    private Vector2 vectorToNext;
+    private ControlType type;
+    private int controlNumber;
+    private Control nextControl;
+
+    public Control(Vector2 position){
         this.position = position;
-        this.time = time;
+        this.type = ControlType.NORMAL;
+    }
+
+    public Control(Vector2 position, ControlType type){
+        this.position = position;
+        this.type = type;
+    }
+
+    public Control(Vector2 position, ControlType type, Course course){
+        this.position = position;
+        this.type = type;
+        this.course = course;
     }
 
     public void setNext(Control next){
         this.nextControl = next;
+        updateVectorToNext();
     }
 
-    public Vector2 position(){
+    public void setControlNumber(int controlNumber){
+        this.controlNumber = controlNumber;
+    }
+
+    public void setCourse(Course course){
+        this.course = course;
+    }
+
+    public void changePosition(Vector2 position){
+        this.position = position;
+        updateVectorToNext();
+    }
+
+    public void changeType(ControlType type){
+        this.type = type;
+    }
+
+    public Vector2 getPosition(){
         return this.position;
     }
 
@@ -27,28 +59,19 @@ public class Control {
         return nextControl;
     }
 
-    public Time getTime(){
-        return time;
-    }
-
-    public void setTime(Time time){
-        this.time = time;
-    }
-
-    public void setControlNumber(int controlNumber){
-        this.controlNumber = controlNumber;
-    }
-
     public String getRepresentation(){
         return "";
     }
-    public boolean isStart(){
-        return false;
+
+    public ControlType getType(){
+        return this.type;
     }
-    public boolean isFinish(){
-        return false;
+
+    public Vector2 getVectorToNext(){
+        return this.vectorToNext;
     }
-    public boolean isValid(){
-        return true;
+
+    private void updateVectorToNext(){
+        this.vectorToNext = new Vector2(this.getPosition(), nextControl.getPosition());
     }
 }
