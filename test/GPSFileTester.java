@@ -14,7 +14,7 @@ public class GPSFileTester {
     GPSFile gpsfile;
 
     private void init(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader loader = new GPSFileLoader(file);
         gpsfile = loader.getGPSFile();
     }

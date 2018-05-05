@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TrackpointTester {
     @Test
     public void testFileInit(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfile = new GPSFileLoader(file);
     }
 
     @Test
     public void testTrackpointParse(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
         GPSFile gps = gpxfileLoader.getGPSFile();
         Trackpoint GPXTrackpoint = gps.getPointAt(0);
@@ -28,7 +28,7 @@ public class TrackpointTester {
 
     @Test
     public void testTrackpointDistance(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
         GPSFile gps = gpxfileLoader.getGPSFile();
         Trackpoint GPXTrackpoint = gps.getPointAt(1);
@@ -43,7 +43,7 @@ public class TrackpointTester {
 
     @Test
     public void testTrackpointDeltaTime(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
         GPSFile gps = gpxfileLoader.getGPSFile();
         Trackpoint GPXTrackpoint = gps.getPointAt(1);
@@ -55,7 +55,7 @@ public class TrackpointTester {
 
     @Test
     public void testTrackpointPace(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
         GPSFile gps = gpxfileLoader.getGPSFile();
         Trackpoint GPXTrackpoint = gps.getPointAt(1260);
@@ -67,7 +67,7 @@ public class TrackpointTester {
 
     @Test
     public void testStartTime(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader gpxfileLoader = new GPSFileLoader(file);
         GPSFile gps = gpxfileLoader.getGPSFile();
         Trackpoint GPXTrackpoint = gps.getPointAt(948);
@@ -78,7 +78,7 @@ public class TrackpointTester {
 
     @Test
     public void testTotalTime(){
-        File file = new File("/Users/nicolasmuller/Prog/Orienteering_Tool/test/Test_gpx_polar");
+        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
         GPSFileLoader fileloader = new GPSFileLoader(file);
         GPSFile gpsfile = fileloader.getGPSFile();
         double dist = 0;

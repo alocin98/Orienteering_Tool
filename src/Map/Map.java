@@ -1,31 +1,32 @@
 package Map;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
+import javafx.scene.image.Image;
+
 import java.io.File;
-import java.io.IOException;
 
 public class Map {
-    private BufferedImage map;
+
+    private File file;
+    private Image image;
 
     public Map(){
-        this.map = null;
+
     }
 
-    public Map(BufferedImage map){
-        setImage(map);
+    public Map(File file) throws Exception{
+        this.file = file;
+        image = new Image(file.toURI().toString());
     }
 
-    public Map(String text){
-        this.map = null;
+    public File getFile(){
+        return file;
     }
 
-    public void loadImage(String filepath) throws IOException {
-        map = ImageIO.read(new File(filepath));
-        setImage(map);
+    public void setImage(Image image){
+        this.image = image;
     }
 
-    public void setImage(BufferedImage map){
-        this.map = map;
+    public Image getImage(){
+        return image;
     }
 }
