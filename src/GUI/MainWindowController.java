@@ -1,6 +1,8 @@
 package GUI;
 
+import Orienteering.Course;
 import Rendering.RouteRenderer;
+import Rendering.Vector2;
 import gpxLib.GPSFileLoader;
 import gpxLib.Trackpoint;
 import javafx.event.ActionEvent;
@@ -8,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -39,6 +42,8 @@ public class MainWindowController {
     private double lastPosX;
     private double lastPosY;
 
+    private boolean drawCourse = false;
+
     @FXML
     Label lbl_loadMapInfo;
 
@@ -47,6 +52,9 @@ public class MainWindowController {
 
     @FXML
     Canvas canvas_map;
+
+    @FXML
+    Button btn_drawCourse;
 
     /**
      * Load File button, opens the map image file.
@@ -60,6 +68,18 @@ public class MainWindowController {
     @FXML
     public void loadGPSFile(ActionEvent actionevent){
         chooseGPSFile();
+    }
+
+    @FXML
+    private void drawCourse(){
+        if(!drawCourse){
+            btn_drawCourse.setText("Finish drawing");
+            drawCourse = true;
+        } else if(drawCourse){
+            btn_drawCourse.setText("Draw Course");
+            drawCourse = false;
+        }
+
     }
 
     private void setCanvas(){
@@ -135,5 +155,27 @@ public class MainWindowController {
     private void setPosition(){
         canvas_map.setTranslateX(canvas_transX);
         canvas_map.setTranslateY(canvas_transY);
+    }
+
+    public void mouseClicked(MouseEvent mouseEvent) {
+        if(drawCourse){
+            int x = (int) mouseEvent.getX();
+            int y = (int) mouseEvent.getY();
+            Orienteering_Tool.course.addControl(new Vector2(x,y));
+            updateCourseRender();
+        }
+    }
+
+    private void updateCourseRender() {
+        Course course = Orienteering_Tool.course;
+        GraphicsContext gc = canvas_map.getGraphicsContext2D();
+        gc.setLineWidth(3.0);
+        gc.setStroke(Color.RED);
+        for(int i = 0; i < course.getControlList().size(); i++){
+            int x = (int) course.getControl(i).getPosition().getX();
+            int y = (int) course.getControl(i).getPosition().getY();
+            gc = canvas_map.getGraphicsContext2D();
+            gc.strokeOval(x-25, y-25, 50,50);
+        }
     }
 }

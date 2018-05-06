@@ -68,7 +68,7 @@
                <children>
                   <ScrollPane id="pane_map" prefHeight="565.0" prefWidth="677.0">
                      <content>
-                        <Canvas fx:id="canvas_map" height="647.0" onMouseDragged="#moveAround" onZoom="#zoomInOut" onZoomFinished="#zoomFinish" onZoomStarted="#zoomStart" width="778.0" />
+                        <Canvas fx:id="canvas_map" height="647.0" onMouseClicked="#mouseClicked" onMouseDragged="#moveAround" onZoom="#zoomInOut" onZoomFinished="#zoomFinish" onZoomStarted="#zoomStart" width="778.0" />
                      </content>
                      <cursor>
                         <Cursor fx:constant="CROSSHAIR" />
@@ -86,6 +86,8 @@
                                  <children>
                                     <Button fx:id="btnLoadMap" layoutX="26.0" layoutY="21.0" mnemonicParsing="false" onAction="#loadMapFile" prefHeight="27.0" prefWidth="146.0" text="load Map" />
                                     <Label fx:id="lbl_loadMapInfo" layoutX="7.0" layoutY="63.0" prefHeight="49.0" prefWidth="192.0" text="Choose an image File to load the map" wrapText="true" />
+                                    <Button fx:id="btn_drawCourse" layoutX="30.0" layoutY="150.0" mnemonicParsing="false" onAction="#drawCourse" prefHeight="27.0" prefWidth="139.0" text="Draw Course" />
+                                    <Label layoutX="29.0" layoutY="314.0" prefHeight="17.0" prefWidth="134.0" text="Course Info" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="DEFAULT" />

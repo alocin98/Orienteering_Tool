@@ -24,6 +24,8 @@ public class Orienteering_Tool extends Application {
     @Override
     public void start(Stage mainStage) throws Exception {
 
+
+        course = new Course();
         // just load fxml file and display it in the stage:
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/view/MainWindow.fxml"));
