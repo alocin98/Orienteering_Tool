@@ -53,4 +53,8 @@ public class RouteRenderer {
         this.startToEndVector = new Vector2(startingPoint, endingPoint);
     }
 
+    public Path getPath(){
+        return this.path;
+    }
+
 }

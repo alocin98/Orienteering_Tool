@@ -1,23 +1,33 @@
 package GUI;
 
+import Rendering.RouteRenderer;
 import gpxLib.GPSFileLoader;
+import gpxLib.Trackpoint;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import Map.*;
 import Main.Orienteering_Tool;
 
-import java.awt.*;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.util.ArrayList;
+
+import static java.awt.Color.GREEN;
 
 public class MainWindowController {
 
