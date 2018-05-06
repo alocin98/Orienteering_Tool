@@ -141,6 +141,14 @@ public class Trackpoint {
         return pace;
     }
 
+    /**
+     * Returns a vector from this to the next trackpoint in the file.
+     * @return      a vector from this to the next trackpoint in the file.
+     */
+    public Vector2 getVectorToNext(){
+        return vectorToNext;
+    }
+
 
     //-----------Helper Methods--------------------------
     /**

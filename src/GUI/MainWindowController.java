@@ -1,5 +1,6 @@
 package GUI;
 
+import gpxLib.GPSFileLoader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -32,6 +33,9 @@ public class MainWindowController {
     Label lbl_loadMapInfo;
 
     @FXML
+    Label lbl_loadGPSInfo;
+
+    @FXML
     Canvas canvas_map;
 
     /**
@@ -39,8 +43,13 @@ public class MainWindowController {
      * @param actionEvent
      */
     @FXML
-    public void loadFile(ActionEvent actionEvent) {
+    public void loadMapFile(ActionEvent actionEvent) {
         chooseImageFile();
+    }
+
+    @FXML
+    public void loadGPSFile(ActionEvent actionevent){
+        chooseGPSFile();
     }
 
     private void setCanvas(){
@@ -66,6 +75,24 @@ public class MainWindowController {
             }
         }
         setCanvas();
+    }
+
+    private void chooseGPSFile(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open GPS File");
+        fileChooser.getExtensionFilters().addAll(
+                new ExtensionFilter("GPS Files", "*.gpx"),
+                new ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(Orienteering_Tool.mainStage);
+        if (selectedFile != null) {
+            try{
+                GPSFileLoader loader = new GPSFileLoader(selectedFile);
+                Orienteering_Tool.gpsfile = loader.getGPSFile();
+                lbl_loadGPSInfo.setText("GPS: " + selectedFile.getName());
+            } catch (Exception e){
+                lbl_loadGPSInfo.setText("Could not read file :(");
+            }
+        }
     }
 
     public void moveAround(MouseEvent mouseEvent) {

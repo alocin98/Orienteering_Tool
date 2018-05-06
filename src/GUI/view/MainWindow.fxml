@@ -84,7 +84,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="btnLoadFile" layoutX="26.0" layoutY="21.0" mnemonicParsing="false" onAction="#loadFile" prefHeight="27.0" prefWidth="146.0" text="load Map" />
+                                    <Button fx:id="btnLoadMap" layoutX="26.0" layoutY="21.0" mnemonicParsing="false" onAction="#loadMapFile" prefHeight="27.0" prefWidth="146.0" text="load Map" />
                                     <Label fx:id="lbl_loadMapInfo" layoutX="7.0" layoutY="63.0" prefHeight="49.0" prefWidth="192.0" text="Choose an image File to load the map" wrapText="true" />
                                  </children>
                                  <cursor>
@@ -100,7 +100,12 @@
                       </TitledPane>
                       <TitledPane animated="false" text="Load File">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnLoadGPS" layoutX="31.0" layoutY="18.0" mnemonicParsing="false" onAction="#loadGPSFile" prefHeight="27.0" prefWidth="140.0" text="Load GPS File" />
+                                    <Label fx:id="lbl_loadGPSInfo" layoutX="32.0" layoutY="52.0" prefHeight="49.0" prefWidth="140.0" text="Load your GPS File" textAlignment="CENTER" wrapText="true" />
+                                    <Label layoutX="24.0" layoutY="120.0" prefHeight="42.0" prefWidth="161.0" text="note: has to be a .gpx File until now." textAlignment="CENTER" wrapText="true" />
+                                 </children></AnchorPane>
                         </content>
                            <effect>
                               <Blend />
