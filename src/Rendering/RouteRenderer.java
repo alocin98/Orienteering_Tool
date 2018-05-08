@@ -1,28 +1,31 @@
 package Rendering;
 
 import gpxLib.Trackpoint;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 
 
 import java.util.ArrayList;
 
 public class RouteRenderer {
-    private ArrayList<Trackpoint> points;
+    private ArrayList<Trackpoint> trackpoints;
     private Trackpoint first;
     private Trackpoint last;
+    private Vector2 firstToLastReal;
 
     private Vector2 startingPoint;
     private Vector2 endingPoint;
     private Vector2 startToEndVector;
-    private Path path;
 
-    public RouteRenderer(ArrayList<Trackpoint> points){
-        this.points = points;
-        this.first = points.get(0);
-        this.last = points.get(points.size()-1);
-        drawPath();
+    private Group group;
+
+    public RouteRenderer(ArrayList<Trackpoint> trackpoints, Group group){
+        this.group = group;
+        this.trackpoints = trackpoints;
+        this.first = trackpoints.get(0);
+        this.last = trackpoints.get(trackpoints.size()-1);
+        this.firstToLastReal = new Vector2((last.getLat() - first.getLat()), (last.getLon()- first.getLon()));
     }
 
     public void setStartingPoint(Vector2 point){
@@ -31,30 +34,41 @@ public class RouteRenderer {
 
     public void setEndingPoint(Vector2 point){
         this.endingPoint = point;
-    }
-
-    private void drawPath(){
-        //Initialize Path
-        path = new Path();
-        MoveTo moveto = new MoveTo();
-        moveto.setX(startingPoint.getX());
-        moveto.setY(startingPoint.getY());
-        path.getElements().add(moveto);
-
-        //Draw Trackpoints
-        for(int i = 0; i < points.size(); i++){
-            LineTo lineTo = new LineTo();
-            lineTo.setX(points.get(i).getVectorToNext().getX());
-            lineTo.setY(points.get(i).getVectorToNext().getY());
-            path.getElements().add(lineTo);
-        }
-
-        //Calculate Vector from Start to End
         this.startToEndVector = new Vector2(startingPoint, endingPoint);
     }
 
-    public Path getPath(){
-        return this.path;
+    public void calculate(){
+        //Get multiplier
+        double x = firstToLastReal.getX() * (startToEndVector.getX() / firstToLastReal.getX());
+        System.out.println(x);
+        double y = firstToLastReal.getY() * (startToEndVector.getY() / firstToLastReal.getY());
+        System.out.println(y);
+        Vector2 multiplier = new Vector2(x,y);
+
+        //Multiply each element
+        for(int i = 0; i < trackpoints.size()-1; i++){
+            Vector2 renderVector = new Vector2(trackpoints.get(i).getVectorToNext().getX(), trackpoints.get(i).getVectorToNext().getY());
+            renderVector.mult(multiplier);
+            trackpoints.get(i).setRenderVector(renderVector);
+        }
     }
 
+    public void draw(Group group){
+        group.getChildren().clear();
+        double x = this.startingPoint.getX();
+        double y = this.startingPoint.getY();
+        Line debugLine = new Line(x,y, x+startToEndVector.getX(), y+startToEndVector.getY());
+        debugLine.setStrokeWidth(2.0);
+        debugLine.setStroke(Color.GREEN);
+        group.getChildren().add(debugLine);
+        for(int i = 0; i < trackpoints.size()-1; i++){
+            Vector2 renderVector = trackpoints.get(i).getRenderVector();
+            Line line = new Line(x,y, x+renderVector.getX(), y+renderVector.getY());
+            line.setStrokeWidth(2.0);
+            line.setStroke(Color.RED);
+            group.getChildren().add(line);
+            x += renderVector.getX();
+            y += renderVector.getY();
+        }
+    }
 }

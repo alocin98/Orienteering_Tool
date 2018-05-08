@@ -1,6 +1,7 @@
 package GUI;
 
 import Orienteering.Course;
+import Rendering.CourseRenderer;
 import Rendering.RouteRenderer;
 import Rendering.Vector2;
 import gpxLib.GPSFileLoader;
@@ -8,16 +9,21 @@ import gpxLib.Trackpoint;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -33,6 +39,8 @@ import java.util.ArrayList;
 import static java.awt.Color.GREEN;
 
 public class MainWindowController {
+
+    private CourseRenderer courserenderer;
 
     private double canvas_scaleY;
     private double canvas_scaleX;
@@ -51,7 +59,16 @@ public class MainWindowController {
     Label lbl_loadGPSInfo;
 
     @FXML
-    Canvas canvas_map;
+    AnchorPane anchor_map;
+
+    @FXML
+    Group group_course;
+
+    @FXML
+    Group group_route;
+
+    @FXML
+    ImageView image_map;
 
     @FXML
     Button btn_drawCourse;
@@ -73,6 +90,7 @@ public class MainWindowController {
     @FXML
     private void drawCourse(){
         if(!drawCourse){
+            courserenderer = new CourseRenderer(group_course);
             btn_drawCourse.setText("Finish drawing");
             drawCourse = true;
         } else if(drawCourse){
@@ -82,11 +100,25 @@ public class MainWindowController {
 
     }
 
-    private void setCanvas(){
+    @FXML
+    public void drawRoute(){
+        RouteRenderer rr = new RouteRenderer(Orienteering_Tool.gpsfile.getTrackpointList(), group_route);
+        rr.setStartingPoint(Orienteering_Tool.course.getStart().getPosition());
+        rr.setEndingPoint(Orienteering_Tool.course.getControl(1).getPosition());
+        rr.calculate();
+        rr.draw(group_route);
+    }
+
+    private void setMapImage(){
         Image map = Orienteering_Tool.map.getImage();
-        canvas_map.setHeight(map.getHeight());
-        canvas_map.setWidth(map.getWidth());
-        canvas_map.getGraphicsContext2D().drawImage(Orienteering_Tool.map.getImage(), 0,0);
+
+        //Adjust size of objects
+        double width = map.getWidth();
+        double height = map.getHeight();
+        anchor_map.setPrefSize(width, height);
+        image_map.setFitHeight(map.getHeight());
+        image_map.setFitWidth(map.getWidth());
+        image_map.setImage(map);
     }
 
     private void chooseImageFile(){
@@ -104,7 +136,7 @@ public class MainWindowController {
                 lbl_loadMapInfo.setText("Could not read file :(");
             }
         }
-        setCanvas();
+        setMapImage();
     }
 
     private void chooseGPSFile(){
@@ -125,57 +157,12 @@ public class MainWindowController {
         }
     }
 
-    public void moveAround(MouseEvent mouseEvent) {
-        double deltaX = mouseEvent.getX() - lastPosX;
-        double deltaY = mouseEvent.getY() - lastPosY;
-        canvas_transX = lastPosX + deltaX;
-        canvas_transY = lastPosY + deltaY;
-        lastPosX = canvas_transX;
-        lastPosY = canvas_transY;
-        setPosition();
-    }
-
-    public void zoomInOut(ZoomEvent zoomEvent) {
-        canvas_scaleX += zoomEvent.getTotalZoomFactor()-1;
-        canvas_scaleY += zoomEvent.getTotalZoomFactor()-1;
-        canvasSetScale();
-    }
-
-    public void zoomFinish(ZoomEvent zoomEvent) {
-        canvasSetScale();
-    }
-
-    public void zoomStart(ZoomEvent zoomEvent) {
-        canvasSetScale();
-    }
-    private void canvasSetScale(){
-        canvas_map.setScaleX(canvas_scaleX);
-        canvas_map.setScaleY(canvas_scaleY);
-    }
-    private void setPosition(){
-        canvas_map.setTranslateX(canvas_transX);
-        canvas_map.setTranslateY(canvas_transY);
-    }
-
     public void mouseClicked(MouseEvent mouseEvent) {
         if(drawCourse){
             int x = (int) mouseEvent.getX();
             int y = (int) mouseEvent.getY();
             Orienteering_Tool.course.addControl(new Vector2(x,y));
-            updateCourseRender();
-        }
-    }
-
-    private void updateCourseRender() {
-        Course course = Orienteering_Tool.course;
-        GraphicsContext gc = canvas_map.getGraphicsContext2D();
-        gc.setLineWidth(3.0);
-        gc.setStroke(Color.RED);
-        for(int i = 0; i < course.getControlList().size(); i++){
-            int x = (int) course.getControl(i).getPosition().getX();
-            int y = (int) course.getControl(i).getPosition().getY();
-            gc = canvas_map.getGraphicsContext2D();
-            gc.strokeOval(x-25, y-25, 50,50);
+            courserenderer.update();
         }
     }
 }

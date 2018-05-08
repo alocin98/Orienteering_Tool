@@ -28,6 +28,8 @@ public class Trackpoint {
     //Next Trackpoint
     private Trackpoint next;
 
+    private Vector2 renderVector;
+
 
     private static final int EARTH_RADIUS = 6371; // Approx Earth radius in KM
 
@@ -70,6 +72,14 @@ public class Trackpoint {
         this.headfile = gpsfile;
         int timeInSeconds = this.getRealTime().getTimeInSeconds() - headfile.getStartTime().getTimeInSeconds();
         this.timeFromStart = new Time(timeInSeconds);
+    }
+
+    /**
+     * Sets the position of this point on the map. should be calculated during crafting process.
+     * @param mapPosition           The position on th emap
+     */
+    public void setRenderVector(Vector2 renderVector){
+        this.renderVector = renderVector;
     }
 
 
@@ -147,6 +157,15 @@ public class Trackpoint {
      */
     public Vector2 getVectorToNext(){
         return vectorToNext;
+    }
+
+    /**
+     * Returns the position of this point on the map.
+     * Should be calculated during the crafting process somewhere.
+     * @return      The position of this point on the map.
+     */
+    public Vector2 getRenderVector(){
+        return this.renderVector;
     }
 
 
