@@ -1,13 +1,14 @@
 package gpxLib;
 
+import Time.Time;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
  * Class to load a .GPX File into a list of trackpoints. GPX is written in xml and DOM library is used to parse.
  *
- * @see GPXTrackpoint
+ * @see Trackpoint
  */
 public class GPSFile {
 

@@ -1,10 +1,7 @@
 package gpxLib;
 
 import Rendering.Vector2;
-
-import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import Time.Time;
 
 /**
  * A Trackpoint stores the location data loaded from the file. It contains the Lon and Lat at the given time.

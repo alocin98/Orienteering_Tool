@@ -1,7 +1,6 @@
 package Orienteering;
 
 import Rendering.Vector2;
-import gpxLib.Time;
 
 public class Control {
 

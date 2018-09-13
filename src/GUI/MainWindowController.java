@@ -4,6 +4,7 @@ import Orienteering.Course;
 import Rendering.CourseRenderer;
 import Rendering.RouteRenderer;
 import Rendering.Vector2;
+import Time.ProxySplitTimes;
 import gpxLib.GPSFileLoader;
 import gpxLib.Trackpoint;
 import javafx.event.ActionEvent;
@@ -12,9 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -50,6 +49,8 @@ public class MainWindowController {
     private double lastPosX;
     private double lastPosY;
 
+    private ProxySplitTimes proxySplits;
+
     private boolean drawCourse = false;
 
     @FXML
@@ -72,6 +73,14 @@ public class MainWindowController {
 
     @FXML
     Button btn_drawCourse;
+
+    @FXML
+    ListView<TextField> lvSplitList;
+
+    @FXML
+    public void initialize() {
+        proxySplits = new ProxySplitTimes(Orienteering_Tool.splits, lvSplitList);
+    }
 
     /**
      * Load File button, opens the map image file.
@@ -107,6 +116,19 @@ public class MainWindowController {
         rr.setEndingPoint(Orienteering_Tool.course.getControl(1).getPosition());
         rr.calculate();
         rr.draw(group_route);
+    }
+
+    @FXML
+    public void lvEditStart(){
+        System.out.println("fck");
+    }
+    @FXML
+    public void lvEditCommit(){
+
+    }
+    @FXML
+    public void lvEditCancel(){
+
     }
 
     private void setMapImage(){
@@ -163,6 +185,8 @@ public class MainWindowController {
             int y = (int) mouseEvent.getY();
             Orienteering_Tool.course.addControl(new Vector2(x,y));
             courserenderer.update();
+
+            proxySplits.addSplit();
         }
     }
 }

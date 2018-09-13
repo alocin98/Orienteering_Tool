@@ -27,7 +27,7 @@ public class CourseRenderer {
                     MoveTo moveTo = new MoveTo();
                     moveTo.setX(100.0f);
                     moveTo.setY(50.0f);
-                    group.getChildren().add(startShape(x, y));
+                    group.getChildren().add(controlShape(x, y, 20));
                     break;
                 case NORMAL:
                     group.getChildren().add(controlShape(x,y, 20));

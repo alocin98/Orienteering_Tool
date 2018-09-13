@@ -1,3 +1,4 @@
+import Time.Time;
 import gpxLib.*;
 import org.junit.jupiter.api.Test;
 

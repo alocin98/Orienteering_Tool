@@ -1,6 +1,7 @@
 package Main;
 
 import Orienteering.Course;
+import Time.SplitTimes;
 import gpxLib.GPSFile;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ public class Orienteering_Tool extends Application {
     public static Map map;
     public static GPSFile gpsfile;
     public static Course course;
+    public static SplitTimes splits;
 
     public static Stage mainStage;
 
@@ -24,7 +26,7 @@ public class Orienteering_Tool extends Application {
     @Override
     public void start(Stage mainStage) throws Exception {
 
-
+        splits = new SplitTimes();
         course = new Course();
         // just load fxml file and display it in the stage:
 

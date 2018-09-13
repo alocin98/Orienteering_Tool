@@ -39,9 +39,9 @@ public class RouteRenderer {
 
     public void calculate(){
         //Get multiplier
-        double x = firstToLastReal.getX() * (startToEndVector.getX() / firstToLastReal.getX());
+        double x = (startToEndVector.getX() / firstToLastReal.getX());
         System.out.println(x);
-        double y = firstToLastReal.getY() * (startToEndVector.getY() / firstToLastReal.getY());
+        double y = (startToEndVector.getY() / firstToLastReal.getY());
         System.out.println(y);
         Vector2 multiplier = new Vector2(x,y);
 
@@ -57,10 +57,6 @@ public class RouteRenderer {
         group.getChildren().clear();
         double x = this.startingPoint.getX();
         double y = this.startingPoint.getY();
-        Line debugLine = new Line(x,y, x+startToEndVector.getX(), y+startToEndVector.getY());
-        debugLine.setStrokeWidth(2.0);
-        debugLine.setStroke(Color.GREEN);
-        group.getChildren().add(debugLine);
         for(int i = 0; i < trackpoints.size()-1; i++){
             Vector2 renderVector = trackpoints.get(i).getRenderVector();
             Line line = new Line(x,y, x+renderVector.getX(), y+renderVector.getY());
