@@ -1,23 +1,14 @@
 import gpxLib.*;
 import org.junit.jupiter.api.Test;
+import Time.Time;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import static java.util.Calendar.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GPSFileTester {
-    GPSFile gpsfile;
-
-    private void init(){
-        File file = new File("/Users/nicolasmuller/Prog/Main.Orienteering_Tool/test/Test_gpx_polar");
-        GPSFileLoader loader = new GPSFileLoader(file);
-        gpsfile = loader.getGPSFile();
-    }
+public class GPSFileTester extends GPSTest{
 
     @Test
     public void initTest(){
@@ -49,5 +40,25 @@ public class GPSFileTester {
         assertEquals(2018, gpsfile.getDate().get(Calendar.YEAR));
         assertEquals(25, gpsfile.getDate().get(Calendar.DAY_OF_MONTH));
         assertEquals(4, gpsfile.getDate().get(Calendar.MONTH));
+    }
+
+    @Test
+    public void findByTimeOneMinuteTest(){
+        init();
+        Time time = new Time(0,1,0);
+        Trackpoint trkpt = gpsfile.findByTime(time);
+        assertEquals(0, trkpt.getTimeFromStart().getHours());
+        assertEquals(1, trkpt.getTimeFromStart().getMinutes());
+        assertEquals(0, trkpt.getTimeFromStart().getSeconds());
+    }
+
+    @Test
+    public void findByTimeThreeMinutesFiveteenTest(){
+        init();
+        Time time = new Time(0,3,15);
+        Trackpoint trkpt = gpsfile.findByTime(time);
+        assertEquals(0, trkpt.getTimeFromStart().getHours());
+        assertEquals(3, trkpt.getTimeFromStart().getMinutes());
+        assertEquals(15, trkpt.getTimeFromStart().getSeconds());
     }
 }

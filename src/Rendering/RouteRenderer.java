@@ -40,9 +40,7 @@ public class RouteRenderer {
     public void calculate(){
         //Get multiplier
         double x = (startToEndVector.getX() / firstToLastReal.getX());
-        System.out.println(x);
         double y = (startToEndVector.getY() / firstToLastReal.getY());
-        System.out.println(y);
         Vector2 multiplier = new Vector2(x,y);
 
         //Multiply each element

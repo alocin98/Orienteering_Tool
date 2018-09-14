@@ -38,6 +38,23 @@ public class GPSFile {
     }
 
 
+    /**
+     * Finds the trackpoint nearest to the given time.
+     * @param time      Time to search for.
+     * @return
+     */
+    public Trackpoint findByTime(Time time){
+        int closest = 99999999;
+            for(Trackpoint trkpt : trackpoints){
+                int timeDif = time.getTimeInSeconds() - trkpt.getTimeFromStart().getTimeInSeconds();
+                if(Math.abs(timeDif) < Math.abs(closest) && timeDif != 0)
+                    closest = timeDif;
+                else
+                    return trkpt;
+            }
+            return new Trackpoint(0,0,0,time);
+    }
+
     //-------------------- Getter methods ------------------------
     public Time getStartTime(){
         return this.startTime;

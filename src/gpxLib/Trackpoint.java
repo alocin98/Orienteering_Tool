@@ -25,6 +25,7 @@ public class Trackpoint {
     //Next Trackpoint
     private Trackpoint next;
 
+    //Help-vector to render
     private Vector2 renderVector;
 
 
