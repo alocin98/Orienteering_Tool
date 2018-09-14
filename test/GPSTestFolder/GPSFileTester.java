@@ -1,14 +1,15 @@
+package GPSTestFolder;
+
+import GPSTestFolder.GPSTest;
 import gpxLib.*;
 import org.junit.jupiter.api.Test;
 import Time.Time;
 
-import java.io.File;
 import java.util.Calendar;
 
-import static java.util.Calendar.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GPSFileTester extends GPSTest{
+public class GPSFileTester extends GPSTest {
 
     @Test
     public void initTest(){
